@@ -1,3 +1,4 @@
+// File Path: script/Deploy.s.sol
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
@@ -5,30 +6,23 @@ import "forge-std/Script.sol";
 import "../src/UserRegistry.sol";
 import "../src/SimpleEscrow.sol";
 
-/**
- * @title DeployContracts
- * @dev Deploys the final contracts for the HumanWork Protocol to a live network.
- */
-contract DeployContracts is Script {
+contract Deploy is Script {
+    // The official WorldID Router address on World Chain Sepolia Testnet
+    // THIS LINE HAS BEEN CORRECTED WITH THE PROPER CHECKSUM
+    address constant WORLD_ID_ROUTER = 0x93a311A2958A436288f836264B4476a454E5A7eC;
+
     function run() external {
-        // Read the private key from your .env file.
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
-
-        // --- CORRECTED World ID address with valid checksum ---
-        address worldIdAddress = 0x98339D2e142A170D2224b5B7423a5a2509BF7884;
-
-        // Start broadcasting transactions using your private key.
         vm.startBroadcast(deployerPrivateKey);
 
-        // 1. Deploy the UserRegistry, passing the World ID address.
-        UserRegistry userRegistry = new UserRegistry(worldIdAddress);
-        console.log("UserRegistry deployed at:", address(userRegistry));
+        // 1. Deploy UserRegistry
+        UserRegistry userRegistry = new UserRegistry(WORLD_ID_ROUTER);
+        console.log("UserRegistry deployed to:", address(userRegistry));
 
-        // 2. Deploy the SimpleEscrow, passing the UserRegistry's address.
+        // 2. Deploy SimpleEscrow with the new UserRegistry address
         SimpleEscrow simpleEscrow = new SimpleEscrow(address(userRegistry));
-        console.log("SimpleEscrow deployed at:", address(simpleEscrow));
-        
-        // Stop broadcasting transactions.
+        console.log("SimpleEscrow deployed to:", address(simpleEscrow));
+
         vm.stopBroadcast();
     }
 }

@@ -1,12 +1,23 @@
-[profile.default]
-src = "src"
-out = "out"
-libs = ["lib"]
+# File Path: foundry.toml
 
-# Add the section below
+[profile.default]
+src = 'src'
+out = 'out'
+libs = ['lib']
+solc_version = '0.8.19'
+auto_detect_solc = true
+optimizer = true
+optimizer_runs = 200
+
+# Defines RPC endpoints for different chains to be used with --rpc-url <alias>
 [rpc_endpoints]
 worldchain = "https://worldchain-sepolia.g.alchemy.com/v2/${ALCHEMY_API_KEY}"
 hedera = "https://testnet.hashio.io/api"
 
+# Defines block explorer settings for contract verification with --verify
 [etherscan]
-worldchain = { key = "${ETHERSCAN_API_KEY}", url = "https://testnet.worlds.org/api" }
+# Configuration for World Chain's explorer (Worldscan)
+worldchain = { key = "${WORLDC_ETHERSCAN_API_KEY}", url = "https://testnet.worlds.org/api", chain = 424242 }
+
+# NOTE: Hedera's HashScan does not have a standard Etherscan API endpoint.
+# Contract verification on Hedera must be done manually through the HashScan website.
