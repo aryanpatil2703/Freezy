@@ -1,9 +1,28 @@
-// src/UserRegistry.sol
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-import "./interfaces/IWorldID.sol";
+// src/interfaces/IWorldID.sol
+// src/interfaces/IWorldID.sol
 
+// This file contains ONLY the interface for the World ID contract.
+// Other contracts will import this file to know how to interact with World ID.
+interface IWorldID {
+    function verifyProof(
+        uint256 root,
+        uint256 groupId,
+        uint256 signalHash,
+        uint256 nullifierHash,
+        uint256 externalNullifierHash,
+        uint256[8] calldata proof
+    ) external view;
+}
+
+// src/UserRegistry.sol
+// src/UserRegistry.sol
+
+// Import the interface from its own dedicated file.
+
+// (The rest of your contract code is unchanged)
 contract UserRegistry {
     IWorldID internal immutable worldId;
 
@@ -13,10 +32,7 @@ contract UserRegistry {
         string credentialsCID;
         string githubProofCID;
         bool isVerified;
-        bool isFreelancer;         // <-- ADDED: To distinguish user types
-        uint256 reputation;         // <-- ADDED: To track user reputation
         uint256 registrationTime;
-        uint256 completedProjects;  // <-- ADDED: To count completed work
         uint256 chainId;
     }
 
@@ -24,9 +40,8 @@ contract UserRegistry {
     mapping(uint256 => bool) public nullifierHashes;
     mapping(address => bool) public isRegistered;
 
-    event UserRegistered(address indexed user, bool isFreelancer, string profileCID, uint256 chainId);
+    event UserRegistered(address indexed user, string profileCID, uint256 chainId);
     event GitHubProofAdded(address indexed user, string githubProofCID);
-    event ReputationUpdated(address indexed user, uint256 newReputation); // <-- ADDED EVENT
 
     constructor(address _worldId) {
         worldId = IWorldID(_worldId);
@@ -35,7 +50,6 @@ contract UserRegistry {
     function registerUser(
         string memory _profileCID,
         string memory _credentialsCID,
-        bool _isFreelancer,          // <-- ADDED: Parameter to set user type
         uint256 root,
         uint256 nullifierHash,
         uint256[8] calldata proof
@@ -47,7 +61,12 @@ contract UserRegistry {
         uint256 externalNullifierHash = uint256(keccak256(abi.encodePacked("humanwork-protocol")));
 
         worldId.verifyProof(
-            root, 1, signalHash, nullifierHash, externalNullifierHash, proof
+            root,
+            1,
+            signalHash,
+            nullifierHash,
+            externalNullifierHash,
+            proof
         );
 
         nullifierHashes[nullifierHash] = true;
@@ -58,15 +77,12 @@ contract UserRegistry {
             credentialsCID: _credentialsCID,
             githubProofCID: "",
             isVerified: true,
-            isFreelancer: _isFreelancer,      // <-- ADDED
-            reputation: 100,                  // <-- ADDED
             registrationTime: block.timestamp,
-            completedProjects: 0,             // <-- ADDED
             chainId: block.chainid
         });
 
         isRegistered[msg.sender] = true;
-        emit UserRegistered(msg.sender, _isFreelancer, _profileCID, block.chainid);
+        emit UserRegistered(msg.sender, _profileCID, block.chainid);
     }
 
     function addGitHubProof(string memory _githubProofCID) external {
@@ -74,15 +90,5 @@ contract UserRegistry {
         users[msg.sender].githubProofCID = _githubProofCID;
         emit GitHubProofAdded(msg.sender, _githubProofCID);
     }
-
-    // --- ADDED NEW FUNCTION ---
-    // This function can be called by other contracts (like the escrow) to update reputation.
-    function updateReputation(address _user, uint256 _newReputation) external {
-        // NOTE: In a production system, you would add access control to restrict who can call this.
-        // For the hackathon, this is sufficient.
-        require(isRegistered[_user], "User not found.");
-        users[_user].reputation = _newReputation;
-        users[_user].completedProjects++; // Increment completed projects
-        emit ReputationUpdated(_user, _newReputation);
-    }
 }
+
