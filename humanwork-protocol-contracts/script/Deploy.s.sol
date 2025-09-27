@@ -1,4 +1,3 @@
-// script/Deploy.s.sol
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
@@ -15,13 +14,13 @@ contract DeployContracts is Script {
         // Read the private key from your .env file.
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
 
-        // THIS IS THE CORRECTED LINE with the valid checksum
-        address worldIdAddress = 0x287043962472655B550b9414416B15A68635AA52;
+        // --- CORRECTED World ID address with valid checksum ---
+        address worldIdAddress = 0x98339D2e142A170D2224b5B7423a5a2509BF7884;
 
         // Start broadcasting transactions using your private key.
         vm.startBroadcast(deployerPrivateKey);
 
-        // 1. Deploy the UserRegistry, passing the REAL World ID address.
+        // 1. Deploy the UserRegistry, passing the World ID address.
         UserRegistry userRegistry = new UserRegistry(worldIdAddress);
         console.log("UserRegistry deployed at:", address(userRegistry));
 

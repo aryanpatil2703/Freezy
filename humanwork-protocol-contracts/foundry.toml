@@ -3,4 +3,10 @@ src = "src"
 out = "out"
 libs = ["lib"]
 
-# See more config options https://github.com/foundry-rs/foundry/blob/master/crates/config/README.md#all-options
+# Add the section below
+[rpc_endpoints]
+worldchain = "https://worldchain-sepolia.g.alchemy.com/v2/${ALCHEMY_API_KEY}"
+hedera = "https://testnet.hashio.io/api"
+
+[etherscan]
+worldchain = { key = "${ETHERSCAN_API_KEY}", url = "https://testnet.worlds.org/api" }
