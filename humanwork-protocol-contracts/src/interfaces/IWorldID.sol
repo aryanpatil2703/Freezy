@@ -7,7 +7,7 @@ pragma solidity ^0.8.19;
 interface IWorldID {
     function verifyProof(
         uint256 root,
-        uint256 groupId,
+        uint256 groupId,a
         uint256 signalHash,
         uint256 nullifierHash,
         uint256 externalNullifierHash,
