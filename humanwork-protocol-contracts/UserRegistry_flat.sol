@@ -18,11 +18,8 @@ interface IWorldID {
 }
 
 // src/UserRegistry.sol
-// src/UserRegistry.sol
+// File Path: src/UserRegistry.sol
 
-// Import the interface from its own dedicated file.
-
-// (The rest of your contract code is unchanged)
 contract UserRegistry {
     IWorldID internal immutable worldId;
 
@@ -32,7 +29,9 @@ contract UserRegistry {
         string credentialsCID;
         string githubProofCID;
         bool isVerified;
+        uint256 reputation;
         uint256 registrationTime;
+        uint256 completedProjects;
         uint256 chainId;
     }
 
@@ -42,6 +41,7 @@ contract UserRegistry {
 
     event UserRegistered(address indexed user, string profileCID, uint256 chainId);
     event GitHubProofAdded(address indexed user, string githubProofCID);
+    event ReputationUpdated(address indexed user, uint256 newReputation);
 
     constructor(address _worldId) {
         worldId = IWorldID(_worldId);
@@ -61,12 +61,7 @@ contract UserRegistry {
         uint256 externalNullifierHash = uint256(keccak256(abi.encodePacked("humanwork-protocol")));
 
         worldId.verifyProof(
-            root,
-            1,
-            signalHash,
-            nullifierHash,
-            externalNullifierHash,
-            proof
+            root, 1, signalHash, nullifierHash, externalNullifierHash, proof
         );
 
         nullifierHashes[nullifierHash] = true;
@@ -77,7 +72,9 @@ contract UserRegistry {
             credentialsCID: _credentialsCID,
             githubProofCID: "",
             isVerified: true,
+            reputation: 100,
             registrationTime: block.timestamp,
+            completedProjects: 0,
             chainId: block.chainid
         });
 
@@ -89,6 +86,13 @@ contract UserRegistry {
         require(isRegistered[msg.sender], "User is not registered.");
         users[msg.sender].githubProofCID = _githubProofCID;
         emit GitHubProofAdded(msg.sender, _githubProofCID);
+    }
+
+    function updateReputation(address _user, uint256 _newReputation) external {
+        require(isRegistered[_user], "User not found.");
+        users[_user].reputation = _newReputation;
+        users[_user].completedProjects++;
+        emit ReputationUpdated(_user, _newReputation);
     }
 }
 
