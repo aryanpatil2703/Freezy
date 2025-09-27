@@ -1,0 +1,167 @@
+{
+	"deploy": {
+		"VM:-": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"main:1": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"ropsten:3": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"rinkeby:4": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"kovan:42": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"goerli:5": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"Custom": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		}
+	},
+	"data": {
+		"bytecode": {
+			"functionDebugData": {},
+			"generatedSources": [],
+			"linkReferences": {},
+			"object": "",
+			"opcodes": "",
+			"sourceMap": ""
+		},
+		"deployedBytecode": {
+			"functionDebugData": {},
+			"generatedSources": [],
+			"immutableReferences": {},
+			"linkReferences": {},
+			"object": "",
+			"opcodes": "",
+			"sourceMap": ""
+		},
+		"gasEstimates": null,
+		"methodIdentifiers": {
+			"getUser(address)": "6f77926b",
+			"isRegistered(address)": "c3c5a547",
+			"updateReputation(address,uint256)": "f5c91a08"
+		}
+	},
+	"abi": [
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "_user",
+					"type": "address"
+				}
+			],
+			"name": "getUser",
+			"outputs": [
+				{
+					"components": [
+						{
+							"internalType": "address",
+							"name": "wallet",
+							"type": "address"
+						},
+						{
+							"internalType": "string",
+							"name": "profileCID",
+							"type": "string"
+						},
+						{
+							"internalType": "string",
+							"name": "credentialsCID",
+							"type": "string"
+						},
+						{
+							"internalType": "string",
+							"name": "githubProofCID",
+							"type": "string"
+						},
+						{
+							"internalType": "bool",
+							"name": "isVerified",
+							"type": "bool"
+						},
+						{
+							"internalType": "bool",
+							"name": "isFreelancer",
+							"type": "bool"
+						},
+						{
+							"internalType": "uint256",
+							"name": "reputation",
+							"type": "uint256"
+						},
+						{
+							"internalType": "uint256",
+							"name": "registrationTime",
+							"type": "uint256"
+						},
+						{
+							"internalType": "uint256",
+							"name": "completedProjects",
+							"type": "uint256"
+						},
+						{
+							"internalType": "uint256",
+							"name": "chainId",
+							"type": "uint256"
+						}
+					],
+					"internalType": "struct IUserRegistry.User",
+					"name": "",
+					"type": "tuple"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "user",
+					"type": "address"
+				}
+			],
+			"name": "isRegistered",
+			"outputs": [
+				{
+					"internalType": "bool",
+					"name": "",
+					"type": "bool"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "user",
+					"type": "address"
+				},
+				{
+					"internalType": "uint256",
+					"name": "newReputation",
+					"type": "uint256"
+				}
+			],
+			"name": "updateReputation",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		}
+	]
+}
